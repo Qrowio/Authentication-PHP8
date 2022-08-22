@@ -29,15 +29,12 @@ class Register extends Database
                 try
                 {
                     $this->hashed = password_hash($this->password,PASSWORD_DEFAULT);
-                    $this->sql = $this->connection->prepare("SELECT email FROM users WHERE email = :email");
-                    $this->sql->execute([":email" => $this->email]);
-                    $this->row = $this->sql->fetch(PDO::FETCH_ASSOC);
-                    if(isset($this->row['email']))
+                    $this->row = $this->select('email', 'users', ['email' => "$this->email"]);
+                    if(!empty($this->row))
                     {
                         echo "The user already exists!";
                     } else 
-                    {
-                        echo "hi";
+                    {   
                         $this->sql = $this->connection->prepare("INSERT INTO users (email, username, password) VALUES (:email, :username, :password)");
                         $this->sql->execute([
                             ':email' => $this->email,

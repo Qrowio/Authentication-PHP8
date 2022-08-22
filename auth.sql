@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS `users`;
 
 CREATE TABLE `users` (
-  `id` int(11) DEFAULT NULL,
+  `id` int(11) DEFAULT NULL AUTO_INCREMENT,
   `email` varchar(255) DEFAULT NULL,
   `username` varchar(255) DEFAULT NULL,
   `password` varchar(60) DEFAULT NULL

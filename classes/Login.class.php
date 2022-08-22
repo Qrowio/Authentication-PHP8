@@ -22,18 +22,20 @@ class Login extends Database
             {
                 try
                 {
-                    $this->sql = $this->connection->prepare("SELECT id, email, username, password FROM users WHERE email = :email");
-                    $this->sql->execute([':email' => $this->email]);
-                    $this->row = $this->sql->fetch(PDO::FETCH_ASSOC);
-                    if($this->sql->rowCount() > 0)
+                    $this->row = $this->select('id, email, username, password', 'users', ['email' => $this->email]);  
+                    if(!empty($this->row))
                     {
-                        if(password_verify($this->password, $this->row['password']))
+                        if(password_verify($this->password, $this->row[0]['password']))
                         {
-                            $_SESSION['user']['id'] = $this->row['id'];
-                            $_SESSION['user']['email'] = $this->row['email'];
-                            $_SESSION['user']['username'] = $this->row['username'];
+                            $_SESSION['user']['id'] = $this->row[0]['id'];
+                            $_SESSION['user']['email'] = $this->row[0]['email'];
+                            $_SESSION['user']['username'] = $this->row[0]['username'];
                             header('location: ./dashboard/welcome.php');
+                        } else {
+                            echo "Wrong credentials!";
                         }
+                    } else {
+                        echo "Wrong credentials!";
                     }
                 } catch(PDOException $error)
                 {
